@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./backend 
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://docker:docker@database/passengers
+    command: >
+      sh -c "flask db init &&
+            flask db migrate -m 'Initial migration' &&
+            flask db upgrade &&
+            flask run --host=0.0.0.0"
+    depends_on:
+      - database
+      # - migration
+
+  frontend:
+    build:
+      context: ./frontend 
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:5000
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: passengers
+    ports:
+      - "5432:5432"
