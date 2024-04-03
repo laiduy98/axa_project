@@ -18,7 +18,7 @@ docker-compose up --build
     - A upload button (please upload the ```train.csv``` that is in the same directory with this ```README```).
     - A simple graph.
     - A table to represent all the data from the dataset.
-- Backeng using Flask
+- Backend using Flask
     - Passenger model for database.
     - Fetch data API.
     - Load in data API.
